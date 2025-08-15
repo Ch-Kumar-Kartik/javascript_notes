@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body style="background-color: #212121;">
+
+</body>
+<script>
+// 0    UNSENT	                Client has been created. open() not called yet. (The XHR object is created but not initialized.)
+// 1	OPENED	                open() has been called.
+// 2	HEADERS_RECEIVED	    send() has been called, and headers and status are available.
+// 3	LOADING	Downloading     responseText holds partial data.
+// 4	DONE	                The operation is complete. 
+    const requestUrl = 'https://api.github.com/users/ch-kumar-kartik' // Defines a constant requestUrl with the GitHub API endpoint for the user ch-kumar-kartik. This URL returns user profile data in JSON format.
+    
+    const xhr = new XMLHttpRequest(); // Creates a new XMLHttpRequest object, which is used to make HTTP requests in JavaScript. xhr.readyState is 0 (UNSENT)
+    
+    xhr.open('GET', requestUrl) // Initializes the request: 'GET': Specifies the HTTP method (GET retrieves data) and requestUrl: The URL to fetch data from and This sets readyState to 1 (OPENED) (The request is configured but not yet sent.)
+    
+    xhr.onreadystatechange = function(){ // as soon as state changes this function will be executed (Attaches an event handler to the onreadystatechange event, which fires whenever the readyState changes)
+        
+        console.log(xhr.readyState) // Logs the current readyState (0, 1, 2, 3, or 4)
+        
+        if (xhr.readyState === 4) { // Checks if the request is complete (DONE)
+
+            data = this.responseText
+            console.log(typeof data)
+            const data = JSON.parse(this.responseText) // Parses the JSON string into a JavaScript object and stores it in a new const data variable
+            console.log(data.followers)
+        }
+    }
+    xhr.send() // Sends the HTTP request to the GitHub API. This transitions the readyState through stages (2, 3, and finally 4 when complete).
+
+</script>
+</html>

@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body style = "background-color: black; color: white;">
+    <div class = "parent">
+        <div class="day">monday</div>
+        <div class="day">tuesday</div>
+        <div class="day">wednesday</div>
+        <div class="day">thursday</div>
+    </div>
+</body>
+<script>
+    const parent = document.querySelector('.parent')
+    console.log(parent);
+    console.log(parent.children); // gives you the no of elements with this class
+    console.log(parent.children[1].innerHTML); // tuesday
+
+    for (let i = 0; i < parent.children.length;  i++){
+        console.log(parent.children[i].innerHTML);
+    }
+
+    parent.children[1].style.color = "orange"
+    console.log(parent.firstElementChild)
+    console.log(parent.LastElementChild)
+
+    const dayOne = document.querySelector('.day')
+    console.log(dayOne)
+    // query selector is not the best when it comes to child to parent traversal as DOM is tree structure based
+    console.log(dayOne.parentElement) // better way to access  the parent 
+    console.log(dayOne.nextSibling) // a way to access the element
+
+    console.log("NODES: ", parent.childNodes); // NodeList(9) [text, div.day, text, div.day, text, div.day, text, div.day, text]
+    // here text means line break
+</script>
+</body>
+</html>

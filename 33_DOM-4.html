@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>chai aur code</title>
+</head>
+<body style = "background-color: black; color: white;">
+    <ul class = "language">
+        <li>Javascript</li>
+    </ul>
+</body>   
+<script>
+    // this is not an optimized method to add/append element
+    function addLanguage(langName){
+        const li = document.createElement('li')
+        li.style.backgroundColor = "black"
+        li.innerHTML = `${langName}`
+        const ele = document.querySelector(".language")
+        ele.appendChild(li) // not optimized as we need to traverse the whole tree
+        document.body.appendChild(ele)
+    }
+    addLanguage("python")
+
+    // below is the optimized method to append/add element
+    function addOptiLanguage(langName){
+        const li = document.createElement('li')
+        li.appendChild(document.createTextNode(langName))
+        document.querySelector('.language').appendChild(li)
+    }
+    addOptiLanguage('golang')
+
+    // editing an element
+    const secondLang = document.querySelector("li:nth-child(2)")
+    // secondLang.innerHTML = "Mojo" (not optimized)
+    const newLi = document.createElement('li')
+    newLi.textContent = "Mojo"
+    secondLang.replaceWith(newLi) // now mojo will be there instead of python (did this method because we had the reference)
+
+    const firstLang = document.querySelector("li:nth-child(1)")
+    const newLi1 = document.createElement('li')
+    newLi1.textContent = "Typescript"
+    firstLang.replaceWith(newLi1)
+    
+    // remove an element
+    const lastLang = document.querySelector('li:last-child')
+    lastLang.remove()
+
+</script>
+</html>
+
+

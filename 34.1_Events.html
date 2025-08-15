@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>htnml Events </title>
+</head>
+<body style="background-color: #414141; color: aliceblue;">
+    <h2>Amazing image</h2>
+    <div >
+        <ul id="images">
+            <li><img width="200px" id="photoshop" src="https://images.pexels.com/photos/3561339/pexels-photo-3561339.jpeg?auto=compress&cs=tinysrgb&w=1600&lazy=load" alt="photoshop"></li>
+            <li><img width="200px" id="japan" src="https://images.pexels.com/photos/3532553/pexels-photo-3532553.jpeg?auto=compress&cs=tinysrgb&w=1600&lazy=load" alt=""></li>
+            <li><img width="200px" id="river" src="https://images.pexels.com/photos/3532551/pexels-photo-3532551.jpeg?auto=compress&cs=tinysrgb&w=1600&lazy=load" alt=""></li>
+            <li><img width="200px" id="owl" src="https://images.pexels.com/photos/3532552/pexels-photo-3532552.jpeg?auto=compress&cs=tinysrgb&w=1600&lazy=load" alt="" ></li>
+            <li><img width="200px" id="prayer" src="https://images.pexels.com/photos/2522671/pexels-photo-2522671.jpeg?auto=compress&cs=tinysrgb&w=1600&lazy=load" alt=""></li>
+            <li><a style="color: aliceblue;" href="https://google.com" id="google">Google</a></li>
+        </ul>
+   </div>
+</body>
+<script>
+    // Events run sequentially but sometimes exception do exist
+    // Approach - 1 : using onclick directly in pure js/html is wrong but in case of react its fine as its scalable
+
+    // Approach - 2 :
+    document.getElementById('owl').addEventListener('click', function(){
+        alert("owl clicked again")
+    }, false) // third parameter is false(default), this parameter determines the nature of event propagation
+
+    // Approach - 3 : (not useful)
+    // attachevent() , jQuery
+
+    // important things to study about Events :
+    // type, timestamp, defaultPrevented
+    // target, toElement, srcElement, currentTarget
+    // From Interview POV : clientX, clientY, screenX, screenY
+    // altKey, ctrlkey, shiftkey, keyCode
+
+    // Event propagation : Event bubbling and Event Capturing
+    document.getElementById('images').addEventListener('click', function(e){
+        console.log("clicked inside the ul")
+    }, false)
+
+    document.getElementById('owl').addEventListener('click', function(e){
+        console.log("owl clicked again")
+    }, false)
+
+    // if i click on the first image in the list, output : clicked inside the ul
+    // but when i click on the owl two events will be triggered but will be the sequence, the sequence will be first the owl event then the second event 
+    // this is event propagation where we move from inside element to outside element also known as "bubbling"
+    // event bubbling takes place when third parameter is false
+
+    // if i click on the owl then first the ul element even will trigger then the owl event will trigger this is known as "event capturing" which takes place when third parameter is true, we move from outer elements to inner elements
+
+    // concept of .stopPropagation
+    document.getElementById('owl').addEventListener('click', function(e){
+        console.log("owl clicked again")
+        e.stopPropagation()
+    }, false)
+    // if i click on owl now only the owl element event is triggered, the ul event doesn't get triggered
+
+    // concept of preventDefault()
+    // is to prevent from the default behaviour taking place, like when i click the google link default behaviour is to open google
+    document.getElementById('google').addEventListener('click', function(e){
+        e.preventDefault()
+        e.stopPropagation()
+        console.log("google clicked")
+    })
+
+    document.querySelector('#images').addEventListener('click' , function(e){
+        console.log(e.target.parentNode); // <li></li>
+        console.log(e.target.tagName);
+        if (e.target.tagName === 'IMG'){ // added this 'if' code block to make sure when clicking on li tag all options don't get removed
+            console.log(e.target.id);
+            let removeIt = e.target.parentNode
+            removeIt.remove()
+            // removeIt.parentNode.removeChild(removeIt) // which is also a valid way
+        }
+    })
+</script>
+</html>
