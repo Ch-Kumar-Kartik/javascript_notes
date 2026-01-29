@@ -1,0 +1,12 @@
+{
+  "name": "typescript-notes",
+  "scripts": {
+    "build": "tsc",
+    "dev": "bun run",
+    "watch": "tsc --watch"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "typescript": "^5.9.3"
+  }
+}
