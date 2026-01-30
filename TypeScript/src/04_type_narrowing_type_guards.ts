@@ -1,7 +1,13 @@
 /*
 unknown can be used instead of any 
 (just a possible alternative)
+*/
 
+function isStringArray(arr: unknown): arr is string[] {
+    return Array.isArray(arr) && arr.every(item => typeof item === 'string')
+}
+
+/*
 Type narrowing in TypeScript is the process of 
 reducing a broad type (like a union) to a more 
 specific type based on runtime checks, so you can 
@@ -65,5 +71,90 @@ class Cutting {
 function serve(chai: KulhadChai | Cutting) {
     if (chai instanceof KulhadChai) {
         return chai.serve()
+    }
+}
+
+// Guard Checking and custom type
+type ChaiOrder = {
+    type: string
+    sugar: number
+}
+
+// checking if the obj passed as an argument is of type ChaiOrder or not
+/*
+Return type: Instead of returning boolean, this function returns obj is ChaiOrder — a special type predicate
+Effect: When the function returns true, TypeScript narrows the type of obj to 
+ChaiOrder in the calling scope
+
+Without the is keyword (if you just returned boolean), TypeScript wouldn't narrow the type inside the if block — you'd still have ChaiOrder | string and would get errors accessing .type and .sugar.
+The obj is ChaiOrder return type tells TypeScript: "Trust me — if this function returns true, the parameter is definitely a 
+ChaiOrder." This enables powerful runtime type checking with compile-time type safety.
+*/
+function isChaiOrder(obj: any): obj is ChaiOrder {
+    return (
+        typeof obj === 'object' &&
+        obj !== null &&
+        typeof obj.type === 'string' &&
+        typeof obj.sugar === 'number'
+    )
+}
+
+function serveOrder(item: ChaiOrder | string) {
+    if (isChaiOrder(item)) {
+        return `Serving ${item.type} chai with ${item.sugar} sugar`
+    }
+    return `serving custom chai : ${item}`
+}
+
+type MasalaChai = { type: "masala", spicelevel: number };
+/*
+You are defining a structural type:
+
+{
+  type: "masala";
+  spicelevel: number;
+}
+
+Meaning:
+“Any object that looks like this is a MasalaChai.”
+
+-----
+type MasalaChai = { type: "masala", spicelevel: number };
+- Compile-time only
+- No constructor
+- No instanceof
+- Zero JS output
+
+class MasalaChai {
+  type = "masala";
+  constructor(public spicelevel: number) {}
+}
+
+- Exists at runtime
+- Has constructor
+- Can use instanceof
+- Generates JS code
+*/
+type GingerChai = { type: "ginger", amount: number };
+type ElaichiChai = { type: "elaichi", aroma: number };
+
+type Chai = MasalaChai | GingerChai | ElaichiChai;
+
+function MakeChai(order: Chai) {
+    switch (order.type) {
+        case "masala":
+            return `Making masala chai with ${order.spicelevel} spices`
+        case "ginger":
+            return `Making ginger chai with ${order.amount} ginger`
+        case "elaichi":
+            return `Making elaichi chai with ${order.aroma} aroma`
+        default:
+            return `Unknown chai type`
+    }
+}
+
+function brew(order: MasalaChai | GingerChai) {
+    if ("spicelevel" in order) {
+        // do something
     }
 }
