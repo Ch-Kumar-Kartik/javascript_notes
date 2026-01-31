@@ -45,7 +45,7 @@ class myRes implements Response {
 also an issue, so use interfaces
 */
 
-type TeaType = "masala" | "ginger" | "lemon"
+type TeaType = "masala" | "ginger" | "lemon" // this is known as literal types
 
 function orderChai(t: TeaType) {
     console.log(t);
@@ -60,3 +60,19 @@ type MaasalaChai = BaseChai & Extrq
 const cup: MaasalaChai = { teaLeaves: 1, masala: 2 }
 
 // optional values/properties
+type User = {
+    username: string;
+    bio?: string;
+}
+
+type Config = {
+    readonly appName: string;
+    version: number;
+}
+
+const cfg: Config = {
+    appName: "Masterji",
+    version: 1
+}
+
+// cfg.appName = "ChaiaurCode" // gives an error
