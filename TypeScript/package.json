@@ -1,5 +1,6 @@
 {
   "name": "typescript-notes",
+  "type": "module",
   "scripts": {
     "build": "tsc",
     "dev": "bun run",
