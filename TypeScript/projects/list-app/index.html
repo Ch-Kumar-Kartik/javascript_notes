@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="A simple list application to manage your tasks efficiently" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <title>List App - Manage Your Tasks</title>
+</head>
+
+<body>
+  <div id="app">
+    <!-- Header -->
+    <header class="app-header">
+      <div class="header-content">
+        <div class="logo">
+          <span class="logo-icon"></span>
+          <h1>List App</h1>
+        </div>
+        <p class="tagline">Organize your tasks effortlessly</p>
+      </div>
+    </header>
+
+    <!-- Main Container -->
+    <main class="main-container">
+      <!-- Add Item Section -->
+      <section class="add-item-section">
+        <div class="input-wrapper">
+          <input type="text" id="item-input" class="item-input" placeholder="What needs to be done?"
+            autocomplete="off" />
+          <button id="add-btn" class="btn btn-primary">
+            <span class="btn-icon">+</span>
+            <span class="btn-text">Add</span>
+          </button>
+        </div>
+      </section>
+
+      <!-- Stats Section -->
+      <section class="stats-section">
+        <div class="stat-card">
+          <span class="stat-number" id="total-count">0</span>
+          <span class="stat-label">Total</span>
+        </div>
+        <div class="stat-card">
+          <span class="stat-number" id="checked-count">0</span>
+          <span class="stat-label">Completed</span>
+        </div>
+        <div class="stat-card">
+          <span class="stat-number" id="unchecked-count">0</span>
+          <span class="stat-label">Pending</span>
+        </div>
+      </section>
+
+      <!-- List Section -->
+      <section class="list-section">
+        <div class="list-header">
+          <h2>Your Tasks</h2>
+          <button id="clear-all-btn" class="btn btn-danger btn-small">
+            <span class="btn-icon"></span>
+            <span class="btn-text">Clear All</span>
+          </button>
+        </div>
+
+        <!-- List Container -->
+        <ul id="list-container" class="list-container">
+          <!-- List items will be dynamically added here -->
+        </ul>
+
+        <!-- Empty State -->
+        <div id="empty-state" class="empty-state">
+          <div class="empty-icon"></div>
+          <h3>No tasks yet</h3>
+          <p>Add your first task above to get started!</p>
+        </div>
+      </section>
+    </main>
+
+    <!-- Footer -->
+    <!-- <footer class="app-footer">
+      <p>Built with <span class="heart">❤️</span> using Vite + TypeScript</p>
+    </footer> -->
+  </div>
+  <script type="module" src="/src/main.ts"></script>
+</body>
+
+</html>

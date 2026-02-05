@@ -1,4 +1,44 @@
-// why need interface ?
+/*
+ * ============================================================
+ *                  WHY USE INTERFACES IN TYPESCRIPT?
+ * ============================================================
+ * 
+ * 1. DEFINE OBJECT SHAPES (Contracts)
+ *    - Interfaces describe the structure an object must have
+ *    - Enforce that objects have specific properties with specific types
+ *    - Example: interface User { name: string; age: number; }
+ * 
+ * 2. CLASS IMPLEMENTATION
+ *    - Classes can "implement" interfaces using the `implements` keyword
+ *    - Ensures the class follows a specific structure/contract
+ *    - Multiple classes can implement the same interface (polymorphism)
+ * 
+ * 3. DECLARATION MERGING (Unique to Interfaces!)
+ *    - Unlike `type`, interfaces with the same name automatically merge
+ *    - Useful for extending third-party library types
+ *    - Example:
+ *        interface Window { myCustomProp: string; }  // Extends built-in Window
+ * 
+ * 4. EXTENDS OTHER INTERFACES
+ *    - interface Dog extends Animal { breed: string; }
+ *    - Promotes code reusability and hierarchical design
+ * 
+ * 5. FUNCTION TYPE DEFINITIONS
+ *    - interface MathOp { (a: number, b: number): number; }
+ * 
+ * KEY BENEFITS:
+ *    Type Safety      - Catch errors at compile time
+ *    IntelliSense     - Better IDE autocomplete & suggestions
+ *    Documentation    - Self-documenting code structure
+ *    Consistency      - Enforce consistent object shapes across codebase
+ * 
+ * WHEN TO USE `interface` vs `type`:
+ *    - Use `interface` for object shapes and class contracts
+ *    - Use `type` for unions, primitives, tuples, and complex type operations
+ *    - Interfaces are generally preferred for defining object structures
+ * 
+ * ============================================================
+ */
 type TeaRecipe = {
     water: number;
     milk: number;
