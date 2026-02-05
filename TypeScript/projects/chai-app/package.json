@@ -1,12 +1,13 @@
 {
-  "name": "chai-app",
-  "module": "index.ts",
+  "name": "chai-shop",
+  "version": "1.0.0",
   "type": "module",
-  "private": true,
-  "devDependencies": {
-    "@types/bun": "latest"
+  "scripts": {
+    "build": "tsc",
+    "dev": "bun run src/app.ts",
+    "typecheck": "tsc --noEmit"
   },
-  "peerDependencies": {
-    "typescript": "^5"
+  "devDependencies": {
+    "typescript": "^5.0.0"
   }
 }
