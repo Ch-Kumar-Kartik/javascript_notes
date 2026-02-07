@@ -7,9 +7,13 @@
     "watch": "tsc --watch"
   },
   "dependencies": {
-    "axios": "^1.13.4"
+    "axios": "^1.13.4",
+    "express": "^5.2.1",
+    "jsonwebtoken": "^9.0.3"
   },
   "devDependencies": {
+    "@types/express": "^5.0.6",
+    "@types/jsonwebtoken": "^9.0.10",
     "typescript": "^5.9.3"
   }
 }

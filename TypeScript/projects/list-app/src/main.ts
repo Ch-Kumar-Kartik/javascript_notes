@@ -1,5 +1,6 @@
-import './style.css';
+import './style.css'
 import { addItem, clearAll, renderList } from './components/list'
+import { initAuth } from './auth/authLogin'
 
 const itemInput = document.getElementById('item-input') as HTMLInputElement
 const addBtn = document.getElementById('add-btn')
@@ -38,5 +39,6 @@ function initApp(): void {
     itemInput?.focus()
 }
 
-// Start the app
+// Initialize authentication (will show app if already logged in)
+initAuth()
 initApp()

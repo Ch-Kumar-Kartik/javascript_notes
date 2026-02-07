@@ -13,15 +13,94 @@
 </head>
 
 <body>
-  <div id="app">
+  <!-- LOGIN PAGE -->
+  <div id="auth-page" class="auth-page">
+    <div class="auth-container">
+      <!-- Auth Header -->
+      <div class="auth-header">
+        <div class="auth-logo">
+          <span class="auth-logo-icon"></span>
+          <h1>List App</h1>
+        </div>
+        <p class="auth-tagline">Sign in to manage your tasks</p>
+      </div>
+
+      <!-- Auth Card -->
+      <div class="auth-card">
+        <!-- Tab Switcher -->
+        <div class="auth-tabs">
+          <button id="signin-tab" class="auth-tab active">Sign In</button>
+          <button id="signup-tab" class="auth-tab">Sign Up</button>
+        </div>
+
+        <!-- Sign In Form -->
+        <form id="signin-form" class="auth-form">
+          <div class="form-group">
+            <label for="signin-username">Username</label>
+            <input type="text" id="signin-username" class="form-input" placeholder="Enter your username"
+              autocomplete="username" required />
+          </div>
+          <div class="form-group">
+            <label for="signin-password">Password</label>
+            <input type="password" id="signin-password" class="form-input" placeholder="Enter your password"
+              autocomplete="current-password" required />
+          </div>
+          <div id="signin-error" class="form-error"></div>
+          <button type="submit" id="signin-btn" class="btn btn-primary btn-full">
+            <span class="btn-text">Sign In</span>
+            <span class="btn-icon">→</span>
+          </button>
+        </form>
+
+        <!-- Sign Up Form (hidden by default) -->
+        <form id="signup-form" class="auth-form hidden">
+          <div class="form-group">
+            <label for="signup-username">Username</label>
+            <input type="text" id="signup-username" class="form-input" placeholder="Choose a username"
+              autocomplete="username" required minlength="3" />
+          </div>
+          <div class="form-group">
+            <label for="signup-password">Password</label>
+            <input type="password" id="signup-password" class="form-input" placeholder="Choose a password"
+              autocomplete="new-password" required minlength="4" />
+          </div>
+          <div class="form-group">
+            <label for="signup-confirm">Confirm Password</label>
+            <input type="password" id="signup-confirm" class="form-input" placeholder="Confirm your password"
+              autocomplete="new-password" required />
+          </div>
+          <div id="signup-error" class="form-error"></div>
+          <button type="submit" id="signup-btn" class="btn btn-primary btn-full">
+            <span class="btn-text">Create Account</span>
+            <span class="btn-icon">→</span>
+          </button>
+        </form>
+      </div>
+
+      <!-- Auth Footer -->
+      <p class="auth-footer-text">
+        Your data is stored locally in your browser
+      </p>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════ -->
+  <!-- TODO APP (hidden until authenticated) -->
+  <!-- ═══════════════════════════════════════════════════ -->
+  <div id="app" class="hidden">
     <!-- Header -->
     <header class="app-header">
       <div class="header-content">
         <div class="logo">
-          <span class="logo-icon"></span>
+          <span class="logo-icon">📋</span>
           <h1>List App</h1>
         </div>
-        <p class="tagline">Organize your tasks effortlessly</p>
+        <div class="header-right">
+          <span id="user-greeting" class="user-greeting">Hello, User!</span>
+          <button id="logout-btn" class="btn btn-logout">
+            <span class="btn-text">Logout</span>
+          </button>
+        </div>
       </div>
     </header>
 
@@ -60,7 +139,7 @@
         <div class="list-header">
           <h2>Your Tasks</h2>
           <button id="clear-all-btn" class="btn btn-danger btn-small">
-            <span class="btn-icon"></span>
+            <span class="btn-icon">🗑️</span>
             <span class="btn-text">Clear All</span>
           </button>
         </div>
@@ -72,17 +151,12 @@
 
         <!-- Empty State -->
         <div id="empty-state" class="empty-state">
-          <div class="empty-icon"></div>
+          <div class="empty-icon">📝</div>
           <h3>No tasks yet</h3>
           <p>Add your first task above to get started!</p>
         </div>
       </section>
     </main>
-
-    <!-- Footer -->
-    <!-- <footer class="app-footer">
-      <p>Built with <span class="heart">❤️</span> using Vite + TypeScript</p>
-    </footer> -->
   </div>
   <script type="module" src="/src/main.ts"></script>
 </body>
