@@ -1,0 +1,545 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="ChaiCode Cafe — A premium chai shop management system" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600&display=swap"
+    rel="stylesheet">
+  <title>ChaiCode Cafe ☕</title>
+</head>
+
+<body>
+
+  <!-- ═══════════════════════════════════════ -->
+  <!-- AUTH PAGE (visible until authenticated) -->
+  <!-- ═══════════════════════════════════════ -->
+  <div id="auth-page" class="auth-page">
+    <div class="auth-container">
+
+      <!-- Auth Brand -->
+      <div class="auth-brand">
+        <span class="auth-brand-icon">🍵</span>
+        <h1 class="auth-brand-title">ChaiCode Cafe</h1>
+        <p class="auth-brand-tagline">Sign in to manage your shop</p>
+      </div>
+
+      <!-- Auth Card -->
+      <div class="auth-card">
+
+        <!-- Tab Switcher -->
+        <div class="auth-tabs">
+          <button id="signin-tab" class="auth-tab active">Sign In</button>
+          <button id="signup-tab" class="auth-tab">Sign Up</button>
+        </div>
+
+        <!-- Sign In Form -->
+        <form id="signin-form" class="auth-form">
+          <div class="form-group">
+            <label for="signin-email">Email</label>
+            <input type="email" id="signin-email" class="form-input" placeholder="you@example.com" autocomplete="email"
+              required />
+          </div>
+          <div class="form-group">
+            <label for="signin-password">Password</label>
+            <input type="password" id="signin-password" class="form-input" placeholder="Enter your password"
+              autocomplete="current-password" required />
+          </div>
+          <div id="signin-error" class="form-error"></div>
+          <button type="submit" id="signin-btn" class="btn btn-primary btn-full">
+            <span class="btn-text">Sign In</span>
+            <span class="btn-icon">→</span>
+          </button>
+        </form>
+
+        <!-- Sign Up Form (hidden by default) -->
+        <form id="signup-form" class="auth-form hidden">
+          <div class="form-group">
+            <label for="signup-name">Full Name</label>
+            <input type="text" id="signup-name" class="form-input" placeholder="Enter your full name"
+              autocomplete="name" required minlength="2" />
+          </div>
+          <div class="form-group">
+            <label for="signup-email">Email</label>
+            <input type="email" id="signup-email" class="form-input" placeholder="you@example.com" autocomplete="email"
+              required />
+          </div>
+          <div class="form-group">
+            <label for="signup-password">Password</label>
+            <input type="password" id="signup-password" class="form-input" placeholder="Choose a password"
+              autocomplete="new-password" required minlength="6" />
+          </div>
+          <div class="form-group">
+            <label for="signup-confirm">Confirm Password</label>
+            <input type="password" id="signup-confirm" class="form-input" placeholder="Confirm your password"
+              autocomplete="new-password" required />
+          </div>
+          <div id="signup-error" class="form-error"></div>
+          <button type="submit" id="signup-btn" class="btn btn-primary btn-full">
+            <span class="btn-text">Create Account</span>
+            <span class="btn-icon">→</span>
+          </button>
+        </form>
+      </div>
+
+      <!-- Auth Footer -->
+      <p class="auth-footer-text">
+        JWT-based authentication · Tokens stored locally
+      </p>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════ -->
+  <!-- MAIN APP (hidden until authenticated)  -->
+  <!-- ═══════════════════════════════════════ -->
+  <div id="app" class="app-layout hidden">
+
+    <!-- ═══════════════════════════════════════ -->
+    <!-- SIDEBAR                                -->
+    <!-- ═══════════════════════════════════════ -->
+    <aside id="sidebar" class="sidebar">
+      <div class="sidebar-brand">
+        <span class="brand-icon">🍵</span>
+        <div class="brand-text">
+          <h1>ChaiCode</h1>
+          <span class="brand-subtitle">Cafe</span>
+        </div>
+      </div>
+
+      <nav class="sidebar-nav">
+        <button id="nav-menu" class="nav-item active" data-page="page-menu">
+          <span class="nav-icon">☕</span>
+          <span class="nav-label">Menu</span>
+        </button>
+        <button id="nav-orders" class="nav-item" data-page="page-orders">
+          <span class="nav-icon">📋</span>
+          <span class="nav-label">Orders</span>
+        </button>
+        <button id="nav-customers" class="nav-item" data-page="page-customers">
+          <span class="nav-icon">👥</span>
+          <span class="nav-label">Customers</span>
+        </button>
+        <button id="nav-inventory" class="nav-item" data-page="page-inventory">
+          <span class="nav-icon">📦</span>
+          <span class="nav-label">Inventory</span>
+        </button>
+      </nav>
+
+      <div class="sidebar-footer">
+        <div class="shop-status">
+          <span class="status-dot"></span>
+          <span class="status-text">Shop Open</span>
+        </div>
+      </div>
+    </aside>
+
+    <!-- ═══════════════════════════════════════ -->
+    <!-- MAIN CONTENT                           -->
+    <!-- ═══════════════════════════════════════ -->
+    <main class="main-content">
+
+      <!-- Top Bar -->
+      <header class="top-bar">
+        <div class="top-bar-left">
+          <button id="sidebar-toggle" class="sidebar-toggle" aria-label="Toggle sidebar">
+            <span></span><span></span><span></span>
+          </button>
+          <h2 id="page-title" class="page-title">Menu</h2>
+        </div>
+        <div class="top-bar-right">
+          <div class="search-wrapper">
+            <span class="search-icon">🔍</span>
+            <input type="text" id="global-search" class="search-input" placeholder="Search..." autocomplete="off" />
+          </div>
+          <div class="top-bar-actions">
+            <button id="theme-toggle" class="icon-btn" aria-label="Toggle theme" title="Toggle theme">🌙</button>
+            <button id="notifications-btn" class="icon-btn" aria-label="Notifications" title="Notifications">
+              🔔
+              <span id="notification-badge" class="notification-badge hidden">0</span>
+            </button>
+            <div class="user-menu">
+              <span id="user-greeting" class="user-greeting">Hello, User!</span>
+              <button id="logout-btn" class="btn btn-logout" title="Sign out">
+                <span class="btn-icon">⏻</span>
+                <span class="btn-text">Logout</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <!-- ════════════════════════════════════ -->
+      <!-- PAGE: MENU                          -->
+      <!-- ════════════════════════════════════ -->
+      <section id="page-menu" class="page active">
+
+        <!-- Menu Stats Row -->
+        <div class="stats-row">
+          <div class="stat-card stat-accent-1">
+            <span class="stat-icon">☕</span>
+            <div class="stat-info">
+              <span id="menu-total-items" class="stat-number">0</span>
+              <span class="stat-label">Total Items</span>
+            </div>
+          </div>
+          <div class="stat-card stat-accent-2">
+            <span class="stat-icon">🔥</span>
+            <div class="stat-info">
+              <span id="menu-hot-count" class="stat-number">0</span>
+              <span class="stat-label">Hot Drinks</span>
+            </div>
+          </div>
+          <div class="stat-card stat-accent-3">
+            <span class="stat-icon">⭐</span>
+            <div class="stat-info">
+              <span id="menu-avg-rating" class="stat-number">—</span>
+              <span class="stat-label">Avg Rating</span>
+            </div>
+          </div>
+          <div class="stat-card stat-accent-4">
+            <span class="stat-icon">🏷️</span>
+            <div class="stat-info">
+              <span id="menu-categories" class="stat-number">5</span>
+              <span class="stat-label">Categories</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Menu Action Bar -->
+        <div class="action-bar">
+          <div class="filter-group">
+            <button class="filter-chip active" data-filter="all">All</button>
+            <button class="filter-chip" data-filter="masala">Masala</button>
+            <button class="filter-chip" data-filter="ginger">Ginger</button>
+            <button class="filter-chip" data-filter="lemon">Lemon</button>
+            <button class="filter-chip" data-filter="elaichi">Elaichi</button>
+            <button class="filter-chip" data-filter="adrak">Adrak</button>
+          </div>
+          <button id="add-chai-btn" class="btn btn-primary">
+            <span class="btn-icon">+</span>
+            <span class="btn-text">Add Chai</span>
+          </button>
+        </div>
+
+        <!-- Menu Grid -->
+        <div id="menu-grid" class="menu-grid">
+          <!-- Chai cards will be dynamically rendered here -->
+        </div>
+
+        <!-- Empty State -->
+        <div id="menu-empty" class="empty-state">
+          <div class="empty-illustration">🍵</div>
+          <h3>No chai on the menu yet</h3>
+          <p>Add your first chai recipe to get started!</p>
+          <button class="btn btn-primary btn-outline" data-trigger="add-chai-btn">
+            <span class="btn-icon">+</span>
+            <span class="btn-text">Add First Chai</span>
+          </button>
+        </div>
+      </section>
+
+      <!-- ════════════════════════════════════ -->
+      <!-- PAGE: ORDERS                        -->
+      <!-- ════════════════════════════════════ -->
+      <section id="page-orders" class="page hidden">
+
+        <!-- Order Stats -->
+        <div class="stats-row">
+          <div class="stat-card stat-accent-1">
+            <span class="stat-icon">📋</span>
+            <div class="stat-info">
+              <span id="orders-total" class="stat-number">0</span>
+              <span class="stat-label">Total Orders</span>
+            </div>
+          </div>
+          <div class="stat-card stat-accent-2">
+            <span class="stat-icon">⏳</span>
+            <div class="stat-info">
+              <span id="orders-pending" class="stat-number">0</span>
+              <span class="stat-label">Pending</span>
+            </div>
+          </div>
+          <div class="stat-card stat-accent-3">
+            <span class="stat-icon">🍳</span>
+            <div class="stat-info">
+              <span id="orders-preparing" class="stat-number">0</span>
+              <span class="stat-label">Preparing</span>
+            </div>
+          </div>
+          <div class="stat-card stat-accent-4">
+            <span class="stat-icon">✅</span>
+            <div class="stat-info">
+              <span id="orders-served" class="stat-number">0</span>
+              <span class="stat-label">Served</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Order Actions -->
+        <div class="action-bar">
+          <div class="filter-group" id="order-status-filter">
+            <button class="filter-chip active" data-filter="all">All</button>
+            <button class="filter-chip" data-filter="pending">Pending</button>
+            <button class="filter-chip" data-filter="preparing">Preparing</button>
+            <button class="filter-chip" data-filter="served">Served</button>
+            <button class="filter-chip" data-filter="cancelled">Cancelled</button>
+          </div>
+          <button id="create-order-btn" class="btn btn-primary">
+            <span class="btn-icon">+</span>
+            <span class="btn-text">New Order</span>
+          </button>
+        </div>
+
+        <!-- Order List -->
+        <div id="order-list" class="order-list">
+          <!-- Order cards rendered dynamically -->
+        </div>
+
+        <div id="orders-empty" class="empty-state">
+          <div class="empty-illustration">📋</div>
+          <h3>No orders yet</h3>
+          <p>Create your first order to see it here!</p>
+        </div>
+      </section>
+
+      <!-- ════════════════════════════════════ -->
+      <!-- PAGE: CUSTOMERS                     -->
+      <!-- ════════════════════════════════════ -->
+      <section id="page-customers" class="page hidden">
+
+        <!-- Customer Stats -->
+        <div class="stats-row">
+          <div class="stat-card stat-accent-1">
+            <span class="stat-icon">👥</span>
+            <div class="stat-info">
+              <span id="customers-total" class="stat-number">0</span>
+              <span class="stat-label">Total Customers</span>
+            </div>
+          </div>
+          <div class="stat-card stat-accent-2">
+            <span class="stat-icon">⭐</span>
+            <div class="stat-info">
+              <span id="customers-regulars" class="stat-number">0</span>
+              <span class="stat-label">Regulars</span>
+            </div>
+          </div>
+          <div class="stat-card stat-accent-3">
+            <span class="stat-icon">📈</span>
+            <div class="stat-info">
+              <span id="customers-new-today" class="stat-number">0</span>
+              <span class="stat-label">New Today</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Customer Actions -->
+        <div class="action-bar">
+          <div class="search-wrapper search-inline">
+            <span class="search-icon">🔍</span>
+            <input type="text" id="customer-search" class="search-input" placeholder="Search customers..."
+              autocomplete="off" />
+          </div>
+          <button id="add-customer-btn" class="btn btn-primary">
+            <span class="btn-icon">+</span>
+            <span class="btn-text">Add Customer</span>
+          </button>
+        </div>
+
+        <!-- Customer List -->
+        <div id="customer-list" class="customer-list">
+          <!-- Customer cards rendered dynamically -->
+        </div>
+
+        <!-- Add Customer Form (hidden) -->
+        <div id="add-customer-form" class="form-card hidden">
+          <h3 class="form-title">Add New Customer</h3>
+          <form id="customer-form">
+            <div class="form-group">
+              <label for="customer-name">Name</label>
+              <input type="text" id="customer-name" class="form-input" placeholder="Enter customer name" required />
+            </div>
+            <div class="form-group">
+              <label for="customer-phone">Phone <span class="optional-tag">Optional</span></label>
+              <input type="tel" id="customer-phone" class="form-input" placeholder="Enter phone number" />
+            </div>
+            <div class="form-actions">
+              <button type="button" id="cancel-customer-btn" class="btn btn-ghost">Cancel</button>
+              <button type="submit" id="save-customer-btn" class="btn btn-primary">Save Customer</button>
+            </div>
+          </form>
+        </div>
+
+        <div id="customers-empty" class="empty-state">
+          <div class="empty-illustration">👥</div>
+          <h3>No customers yet</h3>
+          <p>Add your first customer to start building your directory!</p>
+        </div>
+      </section>
+
+      <!-- ════════════════════════════════════ -->
+      <!-- PAGE: INVENTORY                     -->
+      <!-- ════════════════════════════════════ -->
+      <section id="page-inventory" class="page hidden">
+
+        <!-- Inventory Stats -->
+        <div class="stats-row">
+          <div class="stat-card stat-accent-1">
+            <span class="stat-icon">📦</span>
+            <div class="stat-info">
+              <span id="inventory-total" class="stat-number">0</span>
+              <span class="stat-label">Total Items</span>
+            </div>
+          </div>
+          <div class="stat-card stat-accent-2">
+            <span class="stat-icon">⚠️</span>
+            <div class="stat-info">
+              <span id="inventory-low" class="stat-number">0</span>
+              <span class="stat-label">Low Stock</span>
+            </div>
+          </div>
+          <div class="stat-card stat-accent-3">
+            <span class="stat-icon">✅</span>
+            <div class="stat-info">
+              <span id="inventory-ok" class="stat-number">0</span>
+              <span class="stat-label">In Stock</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Stock Alert Banner -->
+        <div id="stock-alert" class="alert-banner alert-warning hidden">
+          <span class="alert-icon">⚠️</span>
+          <span class="alert-text">Some items are running low on stock!</span>
+          <button id="dismiss-alert" class="alert-dismiss" aria-label="Dismiss">✕</button>
+        </div>
+
+        <!-- Inventory Table -->
+        <div class="table-wrapper">
+          <table id="inventory-table" class="data-table">
+            <thead>
+              <tr>
+                <th>Item</th>
+                <th>Stock</th>
+                <th>Unit</th>
+                <th>Threshold</th>
+                <th>Status</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="inventory-tbody">
+              <!-- Inventory rows rendered dynamically -->
+            </tbody>
+          </table>
+        </div>
+
+        <div id="inventory-empty" class="empty-state">
+          <div class="empty-illustration">📦</div>
+          <h3>No inventory items</h3>
+          <p>Add ingredients and supplies to track stock levels.</p>
+          <button id="add-inventory-btn" class="btn btn-primary btn-outline">
+            <span class="btn-icon">+</span>
+            <span class="btn-text">Add Item</span>
+          </button>
+        </div>
+      </section>
+
+    </main>
+  </div><!-- /.app-layout -->
+
+  <!-- ═══════════════════════════════════════ -->
+  <!-- MODAL OVERLAY                          -->
+  <!-- ═══════════════════════════════════════ -->
+  <div id="modal-overlay" class="modal-overlay hidden">
+    <div id="modal-content" class="modal-content">
+      <div class="modal-header">
+        <h3 id="modal-title" class="modal-title">Modal</h3>
+        <button id="modal-close" class="modal-close" aria-label="Close modal">✕</button>
+      </div>
+      <div id="modal-body" class="modal-body">
+        <!-- Modal content rendered dynamically -->
+      </div>
+      <div id="modal-footer" class="modal-footer hidden">
+        <button id="modal-cancel" class="btn btn-ghost">Cancel</button>
+        <button id="modal-confirm" class="btn btn-primary">Confirm</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════ -->
+  <!-- ORDER FORM (inside modal or standalone)-->
+  <!-- ═══════════════════════════════════════ -->
+  <template id="order-form-template">
+    <form id="order-form" class="order-form">
+      <div class="form-group">
+        <label for="order-customer">Customer</label>
+        <select id="order-customer" class="form-select" required>
+          <option value="">Select customer...</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label>Items</label>
+        <div id="order-items-container" class="order-items-container">
+          <div class="order-item-row">
+            <select class="form-select order-chai-select" required>
+              <option value="">Chai type...</option>
+              <option value="masala">Masala</option>
+              <option value="ginger">Ginger</option>
+              <option value="lemon">Lemon</option>
+              <option value="elaichi">Elaichi</option>
+              <option value="adrak">Adrak</option>
+            </select>
+            <select class="form-select order-size-select" required>
+              <option value="">Size...</option>
+              <option value="1">Small</option>
+              <option value="2">Medium</option>
+              <option value="3">Large</option>
+            </select>
+            <input type="number" class="form-input order-qty-input" placeholder="Qty" min="1" value="1" required />
+            <button type="button" class="btn btn-icon btn-danger remove-item-btn" aria-label="Remove item">✕</button>
+          </div>
+        </div>
+        <button type="button" id="add-order-item" class="btn btn-ghost btn-small">
+          <span class="btn-icon">+</span>
+          <span class="btn-text">Add Item</span>
+        </button>
+      </div>
+
+      <div class="form-group">
+        <label for="order-payment">Payment Method</label>
+        <select id="order-payment" class="form-select" required>
+          <option value="">Select payment...</option>
+          <option value="cash">Cash</option>
+          <option value="card">Card</option>
+          <option value="upi">UPI</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="order-instructions">Special Instructions <span class="optional-tag">Optional</span></label>
+        <textarea id="order-instructions" class="form-textarea" placeholder="Any special requests..."
+          rows="2"></textarea>
+      </div>
+
+      <div class="form-actions">
+        <button type="button" class="btn btn-ghost" data-action="cancel">Cancel</button>
+        <button type="submit" class="btn btn-primary">Place Order</button>
+      </div>
+    </form>
+  </template>
+
+  <!-- ═══════════════════════════════════════ -->
+  <!-- TOAST CONTAINER                        -->
+  <!-- ═══════════════════════════════════════ -->
+  <div id="toast-container" class="toast-container">
+    <!-- Toasts rendered dynamically -->
+  </div>
+
+  <script type="module" src="/src/main.ts"></script>
+</body>
+
+</html>
