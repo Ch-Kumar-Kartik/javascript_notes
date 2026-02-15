@@ -4,9 +4,15 @@
 
 // TODO: Import AuthState, User, AuthError from ./auth.types
 // TODO: Import getStoredTokens, clearTokens from ./token.utils
+import { User, AuthState, AuthError } from "./auth.types"
+import { getStoredTokens, clearTokens } from "./token.utils"
 
-// TODO: Create a type alias for AuthStateListener:
-//   - (state: AuthState) => void
+type AuthStateListener = (state: AuthState) => void;
+
+class AuthStore {
+    private state: AuthState
+    private
+}
 
 // TODO: Implement class AuthStore:
 //

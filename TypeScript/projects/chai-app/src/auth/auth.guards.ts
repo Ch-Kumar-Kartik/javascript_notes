@@ -1,36 +1,77 @@
 // Auth Guards & Validators
 // Type guards and validation functions for authentication data.
 // Concepts: Type Guards, Type Predicates, Narrowing, Assertion Functions
+import { PASSWORD_RULES } from "./auth.constants";
+import { User, AuthCredentials, SignupCredentials, AuthState, TokenPayload } from "./auth.types";
 
-// TODO: Import relevant types from ./auth.types
-// TODO: Import PASSWORD_RULES from ./auth.constants
+export function isUser(value: unknown): value is User {
+    if (typeof value != "object" || value === null) return false;
+    const obj = value as Record<string, unknown>
 
-// TODO: Implement isUser(value: unknown): value is User
-//   - Type guard that checks if a value is a valid User object
-//   - Verify all required properties exist and have correct types
+    return (
+        typeof obj.id === "string" &&
+        typeof obj.name === "string" &&
+        typeof obj.email === "string" &&
+        typeof obj.role === "string" &&
+        obj.createdAt instanceof Date &&
 
-// TODO: Implement isValidEmail(email: string): boolean
-//   - Basic email format validation using a regex pattern
+        (obj.avatarUrl === undefined || typeof obj.avatarUrl === "string"))
+}
 
-// TODO: Implement isValidPassword(password: string): boolean
-//   - Check against PASSWORD_RULES (min length, uppercase, number, special char)
+export function isValidEmail(email: string): boolean {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+}
 
-// TODO: Implement isValidCredentials(value: unknown): value is AuthCredentials
-//   - Type guard for AuthCredentials
-//   - Check that email and password are present and valid strings
+export function isValidPassword(password: string): boolean {
+    if (password.length < PASSWORD_RULES.MIN_LENGTH) return false;
+    if (PASSWORD_RULES.REQUIRE_UPPERCASE && !/[A-Z]/.test(password)) return false;
+    if (PASSWORD_RULES.REQUIRE_NUMBER && !/[0-9]/.test(password)) return false;
+    if (PASSWORD_RULES.REQUIRE_SPECIAL_CHAR && !/[!@#$%^&*()_+\-={}|;':",./<>?]/.test(password)) return false;
+    return true;
+}
 
-// TODO: Implement isValidSignupData(value: unknown): value is SignupCredentials
-//   - Type guard for SignupCredentials
-//   - Verify name, email, password, confirmPassword all exist
-//   - Check that password === confirmPassword
+export function isValidCredentials(value: unknown): value is AuthCredentials {
+    if (typeof value !== "object" || value === null) return false;
+    const obj = value as Record<string, unknown>;
+    return (
+        typeof obj.email === "string" &&
+        typeof obj.password === "string" &&
+        isValidEmail(obj.email)
+    );
+}
 
-// TODO: Implement isAuthenticated(state: AuthState): boolean
-//   - Check if state has a currentUser and isAuthenticated is true
+export function isValidSignupData(value: unknown): value is SignupCredentials {
+    if (typeof value !== "object" || value === null) return false;
+    const obj = value as Record<string, unknown>;
+    return (
+        typeof obj.name === "string" &&
+        typeof obj.email === "string" &&
+        typeof obj.password === "string" &&
+        typeof obj.confirmPassword === "string" &&
+        isValidEmail(obj.email) &&
+        obj.password === obj.confirmPassword
+    );
+}
 
-// TODO: Implement isTokenPayload(value: unknown): value is TokenPayload
-//   - Type guard for decoded token payloads
-//   - Ensure sub, email, role, iat, exp are present and correct types
+export function isAuthenticated(state: AuthState): boolean {
+    return state.isAuthenticated && state.currentUser !== null;
+}
 
-// TODO: Implement assertAuthenticated(state: AuthState): asserts state is AuthState & { currentUser: User }
-//   - Assertion function that throws if not authenticated
-//   - Narrows the type to guarantee currentUser is not null
+export function isTokenPayload(value: unknown): value is TokenPayload {
+    if (typeof value !== "object" || value === null) return false;
+    const obj = value as Record<string, unknown>;
+    return (
+        typeof obj.sub === "string" &&
+        typeof obj.email === "string" &&
+        typeof obj.role === "string" &&
+        typeof obj.iat === "number" &&
+        typeof obj.exp === "number"
+    );
+}
+
+export function assertAuthenticated(state: AuthState): asserts state is AuthState & { currentUser: User } {
+    if (!state.isAuthenticated || state.currentUser === null) {
+        throw new Error("User is not authenticated");
+    }
+}
