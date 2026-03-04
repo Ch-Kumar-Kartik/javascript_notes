@@ -1,26 +1,69 @@
-// Task 8: Implement Generic Repository
 // Concepts: Generic Functions, Multiple Type Params, Generic Interfaces, Generic Return Types
+import { Customer, ChaiOrder } from "../types/interfaces"
+import { ApiResponse } from "../types/aliases"
 
-// TODO: Create a generic Repository class:
+export interface Identifiable<T> {
+    id: T
+}
 
-// 1. Generic interface Identifiable<T>:
-//    - id: T
+export class Repository<T extends Identifiable<string | number>> {
+    private items: T[] = []
 
-// 2. Generic class Repository<T extends Identifiable<string | number>>:
-//    - Private items: T[] array
-//    
-//    - Methods:
-//      - add(item: T): T
-//      - getById(id: T['id']): T | undefined
-//      - getAll(): readonly T[]
-//      - update(id: T['id'], updates: Partial<T>): T | undefined
-//      - delete(id: T['id']): boolean
-//      - find(predicate: (item: T) => boolean): T[]
+    add(item: T): T {
+        this.items.push(item)
+        return item
+    }
 
-// 3. Create specialized repositories:
-//    - CustomerRepository extends Repository<Customer>
-//    - OrderRepository with custom OrderSummary handling
+    getById(id: T["id"]): T | undefined {
+        return this.items.find(item => item.id === id)
+    }
 
-// 4. Generic function:
-//    - wrapInResponse<T>(data: T, status: number): ApiResponse<T>
+    getAll(): readonly T[] {
+        return this.items
+    }
 
+    update(id: T["id"], updates: Partial<T>): T | undefined {
+        const index = this.items.findIndex(item => item.id === id)
+        if (index === -1) return undefined
+        this.items[index] = { ...this.items[index], ...updates }
+        return this.items[index]
+    }
+
+    delete(id: T["id"]): boolean {
+        const index = this.items.findIndex(item => item.id === id)
+        if (index === -1) return false
+        this.items.splice(index, 1)
+        return true
+    }
+
+    find(predicate: (item: T) => boolean): T[] {
+        return this.items.filter(predicate)
+    }
+}
+
+export class CustomerRepository extends Repository<Customer> { }
+
+export class OrderRepository {
+    private orders: ChaiOrder[] = []
+
+    add(order: ChaiOrder): ChaiOrder {
+        this.orders.push(order)
+        return order
+    }
+
+    getById(orderId: string): ChaiOrder | undefined {
+        return this.orders.find(o => o.orderId === orderId)
+    }
+
+    getAll(): readonly ChaiOrder[] {
+        return this.orders
+    }
+
+    findByCustomerId(customerId: number): ChaiOrder[] {
+        return this.orders.filter(o => o.customer.id === customerId)
+    }
+}
+
+export function wrapInResponse<T>(data: T, status: number): ApiResponse<T> {
+    return { status, data }
+}

@@ -1,23 +1,35 @@
-// Task 5: Create Abstract Beverage Class
 // Concepts: Classes, Protected, Readonly, Getters/Setters, Static, Abstract
+import { ChaiSize } from "../types/enums"
 
-// TODO: Create an abstract class Beverage with:
+export abstract class Beverage {
+    protected _name: string
+    protected _basePrice: number
+    protected _temperature: "hot" | "cold"
 
-// Protected properties:
-//   - _name: string
-//   - _basePrice: number
-//   - _temperature: "hot" | "cold"
+    static readonly SHOP_NAME = "ChaiCode Cafe"
 
-// Constructor that takes name and basePrice
+    constructor(name: string, basePrice: number) {
+        this._name = name
+        this._basePrice = basePrice
+        this._temperature = "hot"
+    }
 
-// Abstract methods:
-//   - abstract make(): string
-//   - abstract calculatePrice(size: ChaiSize): number
+    abstract make(): string
+    abstract calculatePrice(size: ChaiSize): number
 
-// Concrete methods:
-//   - describe(): string - returns description
-//   - Getters for name, basePrice, temperature
+    describe(): string {
+        return `${this._name} — a ${this._temperature} beverage from ${Beverage.SHOP_NAME} (₹${this._basePrice})`
+    }
 
-// Static property:
-//   - static readonly SHOP_NAME = "ChaiCode Cafe"
+    get name(): string {
+        return this._name
+    }
 
+    get basePrice(): number {
+        return this._basePrice
+    }
+
+    get temperature(): "hot" | "cold" {
+        return this._temperature
+    }
+}

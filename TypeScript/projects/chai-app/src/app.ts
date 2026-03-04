@@ -29,7 +29,7 @@
 
 // 6. Run the application with console output showing the type safety in action
 
-console.log("🍵 Welcome to ChaiCode Cafe!");
+console.log("Welcome to ChaiCode Cafe!");
 console.log("Starting Chai Shop Management System...");
 
 // Your implementation starts here...

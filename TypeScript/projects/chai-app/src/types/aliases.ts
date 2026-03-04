@@ -1,21 +1,23 @@
-// Task 3: Create Type Aliases & Utility Types
 // Concepts: Literal Types, Type Aliases, Intersection Types, Object Types, Partial, Required, Pick, Omit, Generic Interfaces
+import { ChaiOrder, OrderSummary } from "./interfaces"
 
-// TODO: Create these type aliases:
+export type ChaiName = "Masala Chai" | "Ginger Tea" | "Lemon Tea" | "Elaichi Chai" | "Adrak Chai"
 
-// 1. ChaiName - literal union type of chai names ("Masala Chai" | "Ginger Tea" | "Lemon Tea" | "Elaichi Chai" | "Adrak Chai")
+export type Price = number
 
-// 2. Price - type alias for number
+export type ChaiMenuItem = {
+    name: string,
+    price: number,
+    isHot: boolean,
+    ingredients: string[]
+}
 
-// 3. ChaiMenuItem - object type with name, price, isHot (boolean), and ingredients (string[])
+export type CreateOrderInput = Omit<ChaiOrder, "orderId" | "status" | "timestamp">
 
-// 4. CreateOrderInput - use Omit<> to create a type from ChaiOrder without 'orderId', 'status', and 'timestamp'
+export type UpdateOrderInput = Partial<ChaiOrder>
 
-// 5. UpdateOrderInput - use Partial<> on ChaiOrder
+export type OrderDisplay = Pick<OrderSummary, "orderId" | "status" | "totalPrice">
 
-// 6. OrderDisplay - use Pick<> to select only 'orderId', 'status', 'totalPrice' from OrderSummary
+export type InventoryItem = { itemName: string } & { stock: number } & { threshold: number }
 
-// 7. InventoryItem - intersection type combining { itemName: string } & { stock: number } & { threshold: number }
-
-// 8. ApiResponse<T> - generic type with status: number, data: T, error?: string
-
+export type ApiResponse<T> = { status: number; data: T; error?: string }

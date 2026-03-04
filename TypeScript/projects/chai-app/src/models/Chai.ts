@@ -1,29 +1,63 @@
-// Task 6: Implement Chai Class with Inheritance
 // Concepts: Implements, Public, Private, Private Fields (#), Getters/Setters, Inheritance
+import { Beverage } from "./Beverage"
+import { ChaiCategory, ChaiSize } from "../types/enums"
+import { ChaiRecipe, Ingredient } from "../types/interfaces"
 
-// TODO: Create a Chai class that:
+export class Chai extends Beverage implements ChaiRecipe {
+    // Private field using # syntax (true runtime private)
+    #secretIngredient: string
 
-// 1. Extends Beverage abstract class
-// 2. Implements ChaiRecipe interface
+    // Private with getter/setter for validation
+    private _sugar: number = 2
+    private _ingredients: Ingredient[]
 
-// Private properties (use # syntax for at least one):
-//   - #secretIngredient: string
-//   - private _sugar: number (use getter/setter with validation max 5)
-//   - private ingredients: Ingredient[]
+    // Public properties
+    readonly id: string
+    category: ChaiCategory
+    prepTimeMinutes: number
 
-// Public properties:
-//   - readonly id: string
-//   - category: ChaiCategory
+    constructor(recipe: ChaiRecipe) {
+        super(recipe.name, 40) // call Beverage constructor with name and basePrice
+        this.id = recipe.id
+        this.category = recipe.category
+        this._ingredients = recipe.ingredients
+        this.prepTimeMinutes = recipe.prepTimeMinutes
+        this.#secretIngredient = recipe.secretIngredient ?? "love"
+    }
 
-// Constructor:
-//   - Use parameter properties shorthand (public/private in constructor)
-//   - Initialize with ChaiRecipe data
+    // Getter/Setter with validation (max 5 sugar)
+    get sugar(): number {
+        return this._sugar
+    }
 
-// Implement abstract methods:
-//   - make(): string
-//   - calculatePrice(size: ChaiSize): number
+    set sugar(value: number) {
+        if (value < 0 || value > 5) {
+            throw new Error("Sugar must be between 0 and 5")
+        }
+        this._sugar = value
+    }
 
-// Additional methods:
-//   - addIngredient(ingredient: Ingredient): void
-//   - getSecretIngredient(): string (reveal the private field)
+    // Satisfy ChaiRecipe interface
+    get ingredients(): Ingredient[] {
+        return this._ingredients
+    }
 
+    // Implement abstract method from Beverage
+    make(): string {
+        return `Brewing ${this._name} with ${this._ingredients.length} ingredients and ${this._sugar} spoons of sugar...`
+    }
+
+    // Implement abstract method from Beverage
+    calculatePrice(size: ChaiSize): number {
+        return this._basePrice * size
+    }
+
+    // Additional methods
+    addIngredient(ingredient: Ingredient): void {
+        this._ingredients.push(ingredient)
+    }
+
+    getSecretIngredient(): string {
+        return this.#secretIngredient
+    }
+}

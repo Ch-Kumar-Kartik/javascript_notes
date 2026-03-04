@@ -1,54 +1,91 @@
 // Auth State Store
 // Manages current auth state, session persistence, and state change notifications.
 // Concepts: Classes, Generics, Callbacks, Readonly, Private members
-
-// TODO: Import AuthState, User, AuthError from ./auth.types
-// TODO: Import getStoredTokens, clearTokens from ./token.utils
 import { User, AuthState, AuthError } from "./auth.types"
-import { getStoredTokens, clearTokens } from "./token.utils"
+import { getStoredTokens, clearTokens, decodeToken, isTokenExpired } from "./token.utils"
 
 type AuthStateListener = (state: AuthState) => void;
 
-class AuthStore {
+export class AuthStore {
     private state: AuthState
-    private
-}
+    private listeners: Set<AuthStateListener>;
 
-// TODO: Implement class AuthStore:
-//
-//   Private members:
-//   - state: AuthState (initialized with default empty state)
-//   - listeners: Set<AuthStateListener>
-//
-//   Constructor:
-//   - Initialize default state: { currentUser: null, isAuthenticated: false, isLoading: false, error: null }
-//   - Initialize empty listeners set
-//   - Optionally attempt to restore session from stored tokens
-//
-//   TODO: getState(): Readonly<AuthState>
-//   - Return the current auth state as readonly
-//
-//   TODO: subscribe(listener: AuthStateListener): () => void
-//   - Add a listener to the set
-//   - Return an unsubscribe function that removes the listener
-//
-//   TODO: setUser(user: User): void
-//   - Update state with the user, set isAuthenticated to true
-//   - Notify all listeners
-//
-//   TODO: setError(error: AuthError): void
-//   - Update state with the error
-//   - Notify all listeners
-//
-//   TODO: setLoading(isLoading: boolean): void
-//   - Update the loading state
-//   - Notify all listeners
-//
-//   TODO: clearAuth(): void
-//   - Reset state to default (no user, not authenticated)
-//   - Clear stored tokens
-//   - Notify all listeners
-//
-//   Private:
-//   TODO: notifyListeners(): void
-//   - Iterate over all listeners and call them with current state
+    constructor() {
+        this.state = {
+            currentUser: null,
+            isAuthenticated: false,
+            isLoading: false,
+            error: null
+        }
+        this.listeners = new Set()
+        const storedTokens = getStoredTokens()
+        if (storedTokens) {
+            const payload = decodeToken(storedTokens.accessToken)
+            if (payload && !isTokenExpired(storedTokens)) {
+                this.state = {
+                    currentUser: {
+                        id: payload.sub,
+                        name: payload.email.split("@")[0],
+                        email: payload.email,
+                        role: payload.role,
+                        createdAt: new Date(payload.iat)
+                    },
+                    isAuthenticated: true,
+                    isLoading: false,
+                    error: null
+                }
+            } else {
+                clearTokens()
+            }
+        }
+    }
+
+    getState(): Readonly<AuthState> {
+        return this.state
+    }
+
+    subscribe(listener: AuthStateListener): () => void {
+        this.listeners.add(listener)
+
+        return () => {
+            this.listeners.delete(listener);
+        }
+    }
+
+    setUser(user: User): void {
+        this.state = {
+            currentUser: user,
+            isAuthenticated: true,
+            isLoading: false,
+            error: null
+        }
+        this.notifyListeners()
+    }
+
+    private notifyListeners(): void {
+        this.listeners.forEach((listener) => {
+            return listener(this.state)
+        })
+    }
+
+    setError(error: AuthError): void {
+        this.state = { ...this.state, error: error, isLoading: false }
+        this.notifyListeners();
+    }
+
+    setLoading(load: boolean): void {
+        this.state = { ...this.state, isLoading: load }
+        this.notifyListeners()
+    }
+
+    clearAuth(): void {
+        this.state = {
+            currentUser: null,
+            isAuthenticated: false,
+            isLoading: false,
+            error: null
+        }
+        clearTokens()
+        this.notifyListeners()
+    }
+}

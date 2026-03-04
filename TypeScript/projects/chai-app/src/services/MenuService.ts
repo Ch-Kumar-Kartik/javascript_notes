@@ -1,24 +1,51 @@
-// Task 9: Create Menu System with Arrays & Tuples
 // Concepts: Typed Arrays, Object Arrays, Readonly Arrays, 2D Arrays, Tuples, Named Tuples, Readonly Tuples, Index Signatures
+import { ChaiMenuItem, ChaiName } from "../types/aliases"
 
-// TODO: Implement MenuService with:
+export type MenuItemTuple = [name: string, price: number, available: boolean]
+export type PriceMatrix = number[][]
 
-// 1. Define types:
-//    - MenuItemTuple: [name: string, price: number, available: boolean]
-//    - PriceMatrix: number[][] (2D array for size x category pricing)
+export class MenuService {
+    private menuItems: readonly ChaiMenuItem[]
+    private priceMatrix: PriceMatrix
+    private ratings: { [chaiName: string]: number[] }
 
-// 2. Class MenuService:
-//    Private properties:
-//      - menuItems: readonly ChaiMenuItem[]
-//      - priceMatrix: PriceMatrix
-//      - ratings: { [chaiName: string]: number[] } (index signature for ratings)
-//    
-//    Methods:
-//      - getMenuItem(name: ChaiName): ChaiMenuItem | undefined
-//      - addRating(chai: ChaiName, rating: number): void
-//      - getAverageRating(chai: ChaiName): number
-//      - getMenuAsTuples(): readonly MenuItemTuple[]
-//      - getPriceByMatrixPosition(sizeIndex: number, categoryIndex: number): number
+    constructor(menuItems: ChaiMenuItem[]) {
+        this.menuItems = menuItems
+        this.ratings = {}
+        this.priceMatrix = [
+            [30, 25, 20, 35, 28],  // Small
+            [50, 40, 35, 55, 45],  // Medium
+            [70, 60, 50, 75, 65],  // Large
+        ]
+    }
 
-// 3. Use tuple destructuring in methods where appropriate
+    getMenuItem(name: ChaiName): ChaiMenuItem | undefined {
+        return this.menuItems.find(item => item.name === name)
+    }
 
+    addRating(chai: ChaiName, rating: number): void {
+        if (!this.ratings[chai]) {
+            this.ratings[chai] = []
+        }
+        this.ratings[chai].push(rating)
+    }
+
+    getAverageRating(chai: ChaiName): number {
+        const chaiRatings = this.ratings[chai]
+        if (!chaiRatings || chaiRatings.length === 0) return 0
+        const total = chaiRatings.reduce((sum, r) => sum + r, 0)
+        return total / chaiRatings.length
+    }
+
+    getMenuAsTuples(): readonly MenuItemTuple[] {
+        return this.menuItems.map(({ name, price }): MenuItemTuple => {
+            return [name, price, true]
+        })
+    }
+
+    getPriceByMatrixPosition(sizeIndex: number, categoryIndex: number): number {
+        const row = this.priceMatrix[sizeIndex]
+        if (!row) return 0
+        return row[categoryIndex] ?? 0
+    }
+}

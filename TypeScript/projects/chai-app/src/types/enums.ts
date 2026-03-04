@@ -1,9 +1,27 @@
-// Task 1: Create Base Types & Enums
 // Concepts: Numeric Enums, String Enums, Const Enums, Auto-increment
+export const enum ChaiSize {
+    SMALL = 1,
+    MEDIUM,
+    LARGE
+}
 
-// TODO: Create these enums:
-// - ChaiSize: SMALL, MEDIUM, LARGE (numeric enum with auto-increment starting at 1)
-// - OrderStatus: PENDING = "pending", PREPARING = "preparing", SERVED = "served", CANCELLED = "cancelled" (string enum)
-// - PaymentMethod: CASH, CARD, UPI (const enum)
-// - ChaiCategory: MASALA, GINGER, LEMON, ELAICHI, ADRAK (string enum)
+export const enum OrderStatus {
+    PENDING = "pending",
+    PREPARING = "preparing",
+    SERVED = "served",
+    CANCELLED = "cancelled"
+}
 
+export const enum PaymentMethod {
+    CASH,
+    CARD,
+    UPI,
+}
+
+export const enum ChaiCategory {
+    MASALA = "masala",
+    GINGER = "ginger",
+    LEMON = "lemon",
+    ELAICHI = "elaichi",
+    ADRAK = "adrak"
+}
